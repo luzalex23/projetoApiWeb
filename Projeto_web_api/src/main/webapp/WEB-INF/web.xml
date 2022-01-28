@@ -11,5 +11,4 @@
           <servlet-name>clienteServelet</servlet-name>
           <url-pattern>indexServelet</url-pattern>
         </servlet-mapping>
-
 </web-app>

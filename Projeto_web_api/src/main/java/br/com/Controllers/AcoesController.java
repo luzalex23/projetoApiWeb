@@ -19,17 +19,33 @@ import java.util.List;
 @WebServlet("/acoes")
 public class AcoesController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
+        /*try {
             RequestAPI requisicao = new RequestAPI();
             Gson gson = new Gson();
             JSONObject my_obj = new JSONObject(requisicao.getRequest());
-            Resposta resposta = gson.fromJson(requisicao.getRequest(), Resposta.class);
+            //Resposta resposta = gson.fromJson(requisicao.getRequest(), Resposta.class);
             request.setAttribute("acoes", my_obj);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("SaquePersonalizado.jsp");
             requestDispatcher.forward(request, response);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }*/
+
+        try {
+            RequestAPI requisicao = new RequestAPI();
+            Gson gson = new Gson();
+            // Resposta resposta = gson.fromJson(requisicao.getRequest(), Resposta.class);
+
+            request.setAttribute("acoes", requisicao.getRequest());
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("SaquePersonalizado.jsp");
+            requestDispatcher.forward(request, response);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
 
     }
 }

@@ -25,9 +25,9 @@ public class IndexController extends HttpServlet {
         try {
             RequestAPI requisicao = new RequestAPI();
             Gson gson = new Gson();
-            Resposta resposta = gson.fromJson(requisicao.getRequest(), Resposta.class);
+            // Resposta resposta = gson.fromJson(requisicao.getRequest(), Resposta.class);
 
-            request.setAttribute("investimento", resposta);
+            request.setAttribute("investimento", requisicao.getRequest());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
             requestDispatcher.forward(request, response);
         } catch (InterruptedException e) {
