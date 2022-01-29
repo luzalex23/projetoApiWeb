@@ -38,6 +38,7 @@
 
         </tbody>
     </table>
+
 </div>
 
 <div class="container">
@@ -54,7 +55,10 @@
         <tbody id="linhas">
         </tbody>
     </table>
+    <button type="button" class="btn sacar btn-primary">Sacar</button>
+    <button type="button" class="btn cancelar btn-secondary">Cancelar</button>
 </div>
+
 <script>
     const investimentos = ${acoes}
     let { status, data} = investimentos.response
@@ -113,29 +117,86 @@
     const inputs = document.querySelectorAll('input')
     let tds = document.querySelectorAll('.acumulado')
     const tam = inputs.length
-
+    var errors = 0
     for (let i = 0; i < tam; i++){
         inputs[i].onkeyup = () => {
             $(function() {
                 $('#'+inputs[i].id).maskMoney({decimal: ',', thousands: '.'});
                 let number = parseFloat(tds[i].innerHTML.replace(/\.+/g,'').replace(/\,/g,'.'))
                 let campo = parseFloat(inputs[i].value.replace(/\.+/g,'').replace(/\,/,'.'))
-                console.log(campo, number)
-                console.log(campo > number)
-                if(campo > number){
+
+                const teste = tds[i].querySelector("#erro");
+                if(campo > number && teste == null){
                     let span = document.createElement('span')
+                    span.id = "erro"
                     span.style.color = 'red'
                     span.innerHTML =  `O valor a resgatar não pode ser maior que: `+ tds[i].innerHTML
                     tds[i].appendChild(span)
+                    errors+=1;
                 }
             });
         }
     }
 
+            let soma2 = 0
+            const sacar = document.querySelector('.sacar')
+            sacar.addEventListener('click', (e) => {
+                if(errors !== 0){
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Erro, favor verificar os dados preenchidos!'
+                    }).then((result) => {
+                        errors = 0;
+                        inputs.forEach(valor => valor.value=0)
+                        var el = document.querySelectorAll("#erro");
+                        el.forEach(elemt=>{ var pa = elemt ? elemt.parentNode : null;
+
+                            if (pa) {
+                                pa.removeChild(elemt);
+                            }})
+
+
+                    })
+
+
+                } else {
+                   for(let index = 0; index < inputs.length; index++){
+                        if(inputs[index].value === '') continue;
+                        const soma = parseInt(inputs[index].value.replace(/\./g,'').replace(/\,/g,'.'))
+                        soma2 += soma
+                    }
+                   soma2 = parseFloat(soma2).toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })
+                    swal.fire({
+
+                        title: "Resgate efetuado com sucesso!",
+                        text: 'Valor a ser resgatado R$:' + soma2,
+                        cancelButtonText: 'voltar ao início',
+                        confirmButtonText: 'Novo resgate',
+                        showCloseButton: true,
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+                            inputs.forEach(valor => valor.value=0)
+                            soma2 = 0;
+                        }else{
+                            window.location = "/"
+                            soma2 = 0;
+                        }
+                    })
+                }
+            })
+
+
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//plentz.github.io/jquery-maskmoney/javascripts/jquery.maskMoney.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>

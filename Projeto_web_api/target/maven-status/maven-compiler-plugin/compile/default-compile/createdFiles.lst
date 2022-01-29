@@ -7,3 +7,4 @@ br\com\model\ResponseData.class
 br\com\saquePersonalizado\Saque.class
 br\com\model\Investimento.class
 br\com\HandleApi\RequestAPI.class
+br\com\Controllers\TrasacoesControllers.class
